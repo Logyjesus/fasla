@@ -22,7 +22,6 @@ class AuthController extends Controller
         ]);
         $token = $user->createToken('main')->plainTextToken;
         return response(compact('user','token'),201);
-
     }
 
     public function login(LoginRequest $request)
