@@ -15,6 +15,8 @@ class Seller extends Authenticatable
 
 
     protected $guard = 'seller';
+    protected $table = 'sellers';
+
     /**
      * The attributes that are mass assignable.
      *

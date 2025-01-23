@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\Seller;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
@@ -38,40 +40,25 @@ class AuthController extends Controller
     public function dashboardLogin(LoginRequest $request)
     {
         $data = $request->validated();
-        if(Auth::guard('admin')->attempt(['email' => $data['email'],'password' => $data['password']]))
-        {
-            $admin = Auth::guard('admin')->user();
-            $token = $admin->createToken('admin')->plainTextToken;
-            $guard = 'admin';
-            return response(compact('admin', 'token','guard'), 200);
+        $seller = Seller::where('email', $data['email'])->first();
+        if (!$seller || !Hash::check($data['password'], $seller->password)) {
+            return response()->json(['message' => 'Provided email address or password is incorrect'], 401);
         }
-        else if (Auth::guard('seller')->attempt(['email' => $data['email'],'password' => $data['password']]))
-        {
-            $seller = Auth::guard('seller')->user();
-            $token = $seller->createToken('seller')->plainTextToken;
-            $guard = 'seller';
-            return response(compact('seller', 'token','guard'), 200);
-        }
-        return response(['message' => 'Provided email address or password is incorrect'], 422);
+        $token = $seller->createToken('seller')->plainTextToken;
+        return response()->json(['seller' => $seller,'token' => $token,]);
     }
 
     public function logout(Request $request)
     {
-        if (Auth::guard('web')->check())
-        {
-            $user = Auth::guard('web')->user();
+            $user = Auth::user();
             $user->tokens()->delete();
-        }
-        elseif (Auth::guard('seller')->check())
-        {
-            $seller = Auth::guard('seller')->user();
-            $seller->tokens()->delete();
-        }
-        elseif (Auth::guard('admin')->check())
-        {
-            $admin = Auth::guard('admin')->user();
-            $admin->tokens()->delete();
-        }
+            return response('', 204);
+    }
+
+    public function dashboardLogout(Request $request)
+    {
+        $seller = Auth::guard('seller')->user();
+        $seller->tokens()->delete();
         return response('', 204);
     }
 }
