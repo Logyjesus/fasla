@@ -45,7 +45,8 @@ class AuthController extends Controller
             return response()->json(['message' => 'Provided email address or password is incorrect'], 401);
         }
         $token = $seller->createToken('seller')->plainTextToken;
-        return response()->json(['seller' => $seller,'token' => $token,]);
+        $role = $seller->roles->first()->name;
+        return response()->json(['seller' => $seller,'token' => $token,'role' => $role], 200);
     }
 
     public function logout(Request $request)

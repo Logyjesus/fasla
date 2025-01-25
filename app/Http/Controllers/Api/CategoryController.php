@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Category;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
@@ -50,13 +51,17 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, string $slug)
     {
         $data = $request->validated();
-        $category = Category::find($slug);
-        if ($category) {
-            $category->update([
-                'name' => $data['name'],
-            ]);
-            return response()->json(new CategoryResource($category), 200);
+        $category = Category::where('slug',$slug)->first();
+        if (!$category) {
+            return response()->json([
+                'message' => 'Category not found'
+            ], 404);
         }
+        $category->update([
+            'name' => $data['name'],
+        ]);
+
+        return response()->json(new CategoryResource($category), 200);
     }
 
     /**
@@ -64,7 +69,7 @@ class CategoryController extends Controller
      */
     public function destroy(string $slug)
     {
-        $category = Category::find($slug);
+        $category = Category::where('slug',$slug)->first();
         if ($category) {
             $category->delete();
             return response()->json(['message' => 'Category deleted'], 200);
