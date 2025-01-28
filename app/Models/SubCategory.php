@@ -5,14 +5,14 @@ namespace App\Models;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Category extends Model
+class SubCategory extends Model
 {
-    use HasSlug;
-
+    use HasFactory,HasSlug;
     protected $fillable = [
         'name',
-        'slug',
+        'category_id',
     ];
 
     public function getSlugOptions() : SlugOptions
@@ -25,10 +25,10 @@ class Category extends Model
     public function getRouteKeyName()
     {
         return 'slug';
-    }
 
-    public function subCategories()
+    }
+    public function category()
     {
-        return $this->hasMany(SubCategory::class);
+        return $this->belongsTo(Category::class);
     }
 }

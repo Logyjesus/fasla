@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\Api\CategoryController;
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -19,8 +20,9 @@ Route::middleware('auth:seller')->prefix('dashboard')->group( function () {
     });
     Route::post('/logout',[AuthController::class,'DashboardLogout']);
 
-    Route::middleware('role:admin,seller')->group(function () {
+    Route::middleware('role:admin')->group(function () {
         Route::apiResource('categories', CategoryController::class);
+        Route::apiResource('sub-categories', SubCategoryController::class);
     });
 });
 Route::post('/register',[AuthController::class,'register']);
