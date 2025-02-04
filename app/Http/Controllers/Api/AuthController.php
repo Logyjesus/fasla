@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\SellerResource;
 
 class AuthController extends Controller
 {
@@ -45,8 +46,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Provided email address or password is incorrect'], 401);
         }
         $token = $seller->createToken('seller')->plainTextToken;
-        $role = $seller->roles->first()->name;
-        return response()->json(['seller' => $seller,'token' => $token,'role' => $role], 200);
+        return response()->json(['seller' =>new SellerResource($seller),'token' => $token], 200);
     }
 
     public function logout(Request $request)

@@ -18,15 +18,16 @@ class Product extends Model
         'discounted_price',
         'quantity',
         'seller_id',
-        'subcategory_id',
+        'sub_category_id',
     ];
 
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-        ->generateSlugsFrom('name')
+        ->generateSlugsFrom(fn ($model) => $model->name . '-' . $model->id)
         ->saveSlugsTo('slug');
     }
+
 
     public function getRouteKeyName()
     {
@@ -38,7 +39,7 @@ class Product extends Model
         return $this->belongsTo(Seller::class);
     }
 
-    public function subcategory()
+    public function subCategory()
     {
         return $this->belongsTo(SubCategory::class);
     }

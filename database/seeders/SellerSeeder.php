@@ -4,9 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Seller;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class SellerSeed extends Seeder
+class SellerSeeder extends Seeder
 {
     /**
      * Run the database seeds.

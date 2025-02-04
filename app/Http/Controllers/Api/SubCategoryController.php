@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Models\SubCategory;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\SubCategoryRequest;
 use App\Http\Resources\SubCategoryResource;
-use App\Models\SubCategory;
 
 class SubCategoryController extends Controller
 {

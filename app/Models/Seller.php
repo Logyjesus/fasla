@@ -26,6 +26,7 @@ class Seller extends Authenticatable
     protected $fillable = [
         'name',
         'store_name',
+        'address',
         'phone',
         'email',
         'password',
