@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class CreateSellerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,27 +21,29 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $user = User::where('slug', $this->route('user'))->first();
         return [
-            'name' => 'sometimes|string',
-            'email' => [
-                'sometimes',
-                'email',
-                Rule::unique('users', 'email')->ignore($user?->id),
-            ],
-            'phone' => 'sometimes|string',
-            'password' => 'sometimes|string|min:6|confirmed',
+            'name' => 'required|string|max:255',
+            'store_name' => 'required|string|max:255',
+            'address' => 'nullable|string',
+            'phone' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required|string|min:8',
         ];
     }
+
     public function messages(): array
     {
         return [
             'name.required' => 'Name is required',
+            'store_name.required' => 'Store Name is required',
+            'address.required' => 'Address is required',
+            'phone.required' => 'Phone is required',
             'email.required' => 'Email is required',
             'email.email' => 'Email is invalid',
             'email.unique' => 'Email is already taken',
-            'phone.required' => 'Phone is required',
-            'password.min' => 'Password must be at least 6 characters',
+            'password.required' => 'Password is required',
+            'password.min' => 'Password must be at least 8 characters',
             'confirm_password.same' => 'Password and confirm password must match',
         ];
     }

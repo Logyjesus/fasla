@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\SubCategoryController;
+use App\Http\Controllers\Api\sellerController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -27,6 +28,7 @@ Route::middleware('auth:seller')->prefix('dashboard')->group( function () {
         Route::apiResource('sub-categories', SubCategoryController::class);
         Route::apiResource('products', ProductController::class);
         Route::apiResource('users', UserController::class);
+        Route::apiResource('sellers',sellerController::class);
     });
 });
 Route::post('/register',[AuthController::class,'register']);
