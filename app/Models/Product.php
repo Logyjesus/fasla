@@ -24,7 +24,7 @@ class Product extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-        ->generateSlugsFrom(fn ($model) => $model->name . '-' . $model->id)
+        ->generateSlugsFrom('name')
         ->saveSlugsTo('slug');
     }
 

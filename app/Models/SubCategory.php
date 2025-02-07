@@ -12,21 +12,23 @@ class SubCategory extends Model
     use HasFactory,HasSlug;
     protected $fillable = [
         'name',
+        'slug',
         'category_id',
     ];
 
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
+        ->generateSlugsFrom('name')
+        ->saveSlugsTo('slug');
     }
+
 
     public function getRouteKeyName()
     {
-        return 'slug';
-
+        return'slug';
     }
+
     public function category()
     {
         return $this->belongsTo(Category::class);

@@ -16,17 +16,18 @@ class Category extends Model
         'slug',
     ];
 
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
+        ->generateSlugsFrom('name')
+        ->saveSlugsTo('slug');
     }
 
     public function getRouteKeyName()
     {
-        return 'slug';
+        return'slug';
     }
+
 
     public function subCategories()
     {
