@@ -30,7 +30,7 @@ class UpdateSellerRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore($seller?->id),
+                Rule::unique('sellers', 'email')->ignore($seller?->id),
             ],
             'address' => 'sometimes|string',
             'phone' => 'sometimes|string|max:255',

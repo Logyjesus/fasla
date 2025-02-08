@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Seller;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateSellerRequest extends FormRequest
+class UpdateAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,14 +23,15 @@ class CreateSellerRequest extends FormRequest
      */
     public function rules(): array
     {
+        $admin = Seller::where('slug', $this->route('admin'))->first();
         return [
-            'name' => 'required|string|max:255',
-            'store_name' => 'required|string|max:255',
-            'address' => 'nullable|string',
-            'phone' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:sellers',
-            'password' => 'required|string|min:8|confirmed',
-            'password_confirmation' => 'required|string|min:8',
+            'name' => 'sometimes|string',
+            'email' => [
+                'sometimes',
+                'email',
+                Rule::unique('sellers', 'email')->ignore($admin?->id),
+            ],
+            'password' => 'sometimes|string|min:6|confirmed',
         ];
     }
 
@@ -36,14 +39,10 @@ class CreateSellerRequest extends FormRequest
     {
         return [
             'name.required' => 'Name is required',
-            'store_name.required' => 'Store Name is required',
-            'address.required' => 'Address is required',
-            'phone.required' => 'Phone is required',
             'email.required' => 'Email is required',
             'email.email' => 'Email is invalid',
             'email.unique' => 'Email is already taken',
-            'password.required' => 'Password is required',
-            'password.min' => 'Password must be at least 8 characters',
+            'password.min' => 'Password must be at least 6 characters',
             'confirm_password.same' => 'Password and confirm password must match',
         ];
     }
