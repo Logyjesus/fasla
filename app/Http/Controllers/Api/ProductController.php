@@ -16,6 +16,23 @@ class ProductController extends Controller
      */
     public function index()
     {
+        if (Auth::guard('seller')->user()->hasRole('admin')) {
+            $products = Product::latest()->paginate(10);
+            $data = [
+                'products' => ProductResource::collection($products),
+                'pagination' => [
+                    'total' => $products->total(),
+                    'current_page' => $products->currentPage(),
+                    'per_page' => $products->perPage(),
+                    'links' => [
+                        'first_page' => $products->url(1),
+                        'last_page' => $products->url($products->lastPage()),
+                    ]
+                ]
+            ];
+            return response()->json($data);
+        }
+
         $sellerID = Auth::guard('seller')->user()->id;
         $products = Product::where('seller_id', $sellerID)->latest()->paginate(10);
 
@@ -132,9 +149,6 @@ class ProductController extends Controller
     $data = $request->validated();
     $data['seller_id'] = $sellerID;
 
-    $data['colors'] = isset($data['colors'][0]) ? json_decode($data['colors'][0], true) : [];
-    $data['sizes'] = isset($data['sizes'][0]) ? json_decode($data['sizes'][0], true) : [];
-
     $product->update([
         'name' => $data['name'],
         'description' => $data['description'],
@@ -176,7 +190,7 @@ class ProductController extends Controller
     public function destroy(string $slug)
     {
         $product = Product::where('slug', $slug)->firstOrFail();
-        if($product) {
+        if($product->seller_id == Auth::guard('seller')->user()->id || Auth::guard('seller')->user()->hasRole('admin')) {
             $product->delete();
             return response()->json(['message' => 'Product deleted'], 200);
         }

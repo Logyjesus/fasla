@@ -21,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/orders/{slug}', [OrderController::class, 'destroy']);
     Route::get('/orders/{slug}', [OrderController::class, 'show']);
     Route::get('/products/{slug}',[ProductController::class,'getProductsBySubCategory']);
+    Route::get('/categories',[CategoryController::class,'index']);
+    Route::get('/sub-categories/{slug}',[SubCategoryController::class,'getSubCategoriesByCategory']);
 });
 
 Route::middleware('auth:seller')->prefix('dashboard')->group( function () {
@@ -28,11 +30,11 @@ Route::middleware('auth:seller')->prefix('dashboard')->group( function () {
         return $request->user();
     });
     Route::post('/logout',[AuthController::class,'DashboardLogout']);
-
+    Route::apiResource('products', ProductController::class);
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('sub-categories', SubCategoryController::class);
-        Route::apiResource('products', ProductController::class);
+        Route::get('/sub-categories/{slug}',[SubCategoryController::class,'getSubCategoriesByCategory']);
         Route::apiResource('users', UserController::class);
         Route::apiResource('sellers',sellerController::class);
         Route::apiResource('admins',AdminController::class);

@@ -6,6 +6,7 @@ use App\Models\SubCategory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubCategoryRequest;
 use App\Http\Resources\SubCategoryResource;
+use App\Models\Category;
 
 class SubCategoryController extends Controller
 {
@@ -15,6 +16,17 @@ class SubCategoryController extends Controller
     public function index()
     {
         $subcategories = SubCategory::all();
+        if(count($subcategories) > 0)
+        {
+            return response()->json(SubCategoryResource::collection($subcategories));
+        }
+        return response()->json(['message' => 'No subcategories found'], 404);
+    }
+
+    public function getSubCategoriesByCategory(string $slug)
+    {
+        $category = Category::where('slug', $slug)->firstOrFail();
+        $subcategories = SubCategory::where('category_id', $category->id)->get();
         if(count($subcategories) > 0)
         {
             return response()->json(SubCategoryResource::collection($subcategories));
