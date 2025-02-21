@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\SubCategory;
 
 class ProductController extends Controller
 {
@@ -34,6 +35,34 @@ class ProductController extends Controller
             return response()->json($data);
         }
 
+        return response()->json(['message' => 'No products found'], 404);
+    }
+    /**
+     * Get products by subcategory.
+     *
+     * @param string $slug
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getProductsBySubCategory(string $slug)
+    {
+        $subCategory = SubCategory::where('slug', $slug)->firstOrFail();
+        $products = Product::where('sub_category_id', $subCategory->id)->latest()->paginate(10);
+
+        if (!$products->isEmpty()) {
+            $data = [
+                'products' => ProductResource::collection($products),
+                'pagination' => [
+                    'total' => $products->total(),
+                    'current_page' => $products->currentPage(),
+                    'per_page' => $products->perPage(),
+                    'links' => [
+                        'first_page' => $products->url(1),
+                        'last_page' => $products->url($products->lastPage()),
+                    ]
+                ]
+            ];
+            return response()->json($data);
+        }
         return response()->json(['message' => 'No products found'], 404);
     }
 

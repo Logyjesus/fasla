@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my-orders',[OrderController::class, 'myOrders']);
     Route::delete('/orders/{slug}', [OrderController::class, 'destroy']);
     Route::get('/orders/{slug}', [OrderController::class, 'show']);
+    Route::get('/products/{slug}',[ProductController::class,'getProductsBySubCategory']);
 });
 
 Route::middleware('auth:seller')->prefix('dashboard')->group( function () {
