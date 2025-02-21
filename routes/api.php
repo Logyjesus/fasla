@@ -2,20 +2,24 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\sellerController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\SubCategoryController;
-use App\Http\Controllers\Api\sellerController;
-use App\Http\Controllers\Api\AdminController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
     Route::post('/logout', [AuthController::class, 'logout']);
-
+    Route::apiResource('orders', OrderController::class)->except(['index','update']);
+    Route::get('/my-orders',[OrderController::class, 'myOrders']);
+    Route::delete('/orders/{slug}', [OrderController::class, 'destroy']);
+    Route::get('/orders/{slug}', [OrderController::class, 'show']);
 });
 
 Route::middleware('auth:seller')->prefix('dashboard')->group( function () {
@@ -31,6 +35,9 @@ Route::middleware('auth:seller')->prefix('dashboard')->group( function () {
         Route::apiResource('users', UserController::class);
         Route::apiResource('sellers',sellerController::class);
         Route::apiResource('admins',AdminController::class);
+        Route::apiResource('orders', OrderController::class)->only(['index','update']);
+        Route::delete('/orders/{slug}', [OrderController::class, 'destroy']);
+        Route::get('/orders/{slug}', [OrderController::class, 'show']);
     });
 });
 Route::post('/register',[AuthController::class,'register']);

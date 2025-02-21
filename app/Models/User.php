@@ -66,4 +66,9 @@ class User extends Authenticatable
         return'slug';
     }
 
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

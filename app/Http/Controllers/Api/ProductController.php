@@ -47,9 +47,6 @@ class ProductController extends Controller
         $data = $request->validated();
         $data['seller_id'] = $sellerID;
 
-        $data['colors'] = isset($data['colors'][0]) ? json_decode($data['colors'][0], true) : [];
-        $data['sizes'] = isset($data['sizes'][0]) ? json_decode($data['sizes'][0], true) : [];
-
         $product = Product::create([
             'name' => $data['name'],
             'description' => $data['description'],
@@ -150,7 +147,10 @@ class ProductController extends Controller
     public function destroy(string $slug)
     {
         $product = Product::where('slug', $slug)->firstOrFail();
-        $product->delete();
-        return response()->json(['message' => 'Product deleted'], 200);
+        if($product) {
+            $product->delete();
+            return response()->json(['message' => 'Product deleted'], 200);
+        }
+        return response()->json(['message' => 'Product not found'], 404);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Seller;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateAdminRequest;
+use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\UpdateAdminRequest;
 use App\Http\Resources\SellerResource;
 
@@ -37,7 +37,7 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateAdminRequest $request)
+    public function store(StoreAdminRequest $request)
     {
         $data = $request->validated();
         $admin = Seller::create([

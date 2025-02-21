@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Seller;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateSellerRequest;
-use App\Http\Requests\UpdateSellerRequest;
 use App\Http\Resources\SellerResource;
+use App\Http\Requests\StoreSellerRequest;
+use App\Http\Requests\UpdateSellerRequest;
 
 class sellerController extends Controller
 {
@@ -37,7 +37,7 @@ class sellerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateSellerRequest $request)
+    public function store(StoreSellerRequest $request)
     {
         $data = $request->validated();
         $seller = Seller::create([
