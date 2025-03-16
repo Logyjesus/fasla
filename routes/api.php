@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/orders/{slug}', [OrderController::class, 'destroy']);
     Route::get('/orders/{slug}', [OrderController::class, 'show']);
     Route::get('/products/{slug}',[ProductController::class,'getProductsBySubCategory']);
+    Route::get('/product/{slug}',[ProductController::class,'show']);
     Route::get('/categories',[CategoryController::class,'index']);
     Route::get('/sub-categories/{slug}',[SubCategoryController::class,'getSubCategoriesByCategory']);
 });
