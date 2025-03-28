@@ -31,6 +31,7 @@ class StoreOrderRequest extends FormRequest
             'order_items.*.product_id' => 'required|exists:products,id',
             'order_items.*.quantity' => 'required|integer|min:1',
             'order_items.*.price' => 'required|numeric|min:0',
+            'order_items.*.color' => 'nullable|string',
         ];
     }
 
@@ -51,6 +52,7 @@ class StoreOrderRequest extends FormRequest
             'order_items.*.price.required' => 'Price is required for each order item',
             'order_items.*.price.numeric' => 'Price must be a number for each order item',
             'order_items.*.price.min' => 'Price must be at least 0 for each order item',
+            'order_items.*.color.string' => 'Color must be a valid string',
         ];
     }
 }

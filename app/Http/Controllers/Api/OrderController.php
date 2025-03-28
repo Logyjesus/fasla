@@ -94,6 +94,7 @@ class OrderController extends Controller
                 'product_id' => $product->id,
                 'quantity' => $item['quantity'],
                 'price' => $product->discounted_price,
+                'color' => $item['color'] ?? null,
             ]);
 
             $product->decrement('quantity', $item['quantity']);
