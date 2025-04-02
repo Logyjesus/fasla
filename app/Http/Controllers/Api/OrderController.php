@@ -18,7 +18,14 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::paginate(10);
+        $user = Auth::guard('seller')->user();
+        if($user->hasRole('admin')) {
+            $orders = Order::paginate(10);
+        } else {
+            $orders = Order::whereHas('orderItems', function ($query) use ($user) {
+                $query->where('seller_id', $user->id);
+            })->paginate(10);
+        }
         if(!$orders->isEmpty())
         {
             $data = [
@@ -93,8 +100,10 @@ class OrderController extends Controller
             $order->orderItems()->create([
                 'product_id' => $product->id,
                 'quantity' => $item['quantity'],
+                'seller_id' => $product->seller_id,
                 'price' => $product->discounted_price,
                 'color' => $item['color'] ?? null,
+                'size' => $item['size'] ?? null,
             ]);
 
             $product->decrement('quantity', $item['quantity']);
@@ -137,12 +146,26 @@ class OrderController extends Controller
     public function update(UpdateOrderStatusRequest $request, string $slug)
     {
         $order = Order::where('slug', $slug)->first();
-        if ($order) {
-            $data = $request->validated();
-            $order->update($data);
+
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+
+        $user = Auth::guard('seller')->user();
+
+        if ($user->hasRole('admin')) {
+            $order->update($request->validated());
             return response()->json(new OrderResource($order));
         }
-        return response()->json(['message' => 'Order not found'], 404);
+
+        $ownsProduct = $order->orderItems()->where('seller_id', $user->id)->exists();
+
+        if ($ownsProduct) {
+            $order->update($request->validated());
+            return response()->json(new OrderResource($order));
+        }
+
+        return response()->json(['message' => 'You are not authorized to update this order'], 403);
     }
 
     /**

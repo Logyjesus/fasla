@@ -32,6 +32,7 @@ Route::middleware('auth:seller')->prefix('dashboard')->group( function () {
     });
     Route::post('/logout',[AuthController::class,'DashboardLogout']);
     Route::apiResource('products', ProductController::class);
+    Route::apiResource('orders', OrderController::class)->only(['index','update']);
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('sub-categories', SubCategoryController::class);
@@ -39,7 +40,6 @@ Route::middleware('auth:seller')->prefix('dashboard')->group( function () {
         Route::apiResource('users', UserController::class);
         Route::apiResource('sellers',sellerController::class);
         Route::apiResource('admins',AdminController::class);
-        Route::apiResource('orders', OrderController::class)->only(['index','update']);
         Route::delete('/orders/{slug}', [OrderController::class, 'destroy']);
         Route::get('/orders/{slug}', [OrderController::class, 'show']);
     });

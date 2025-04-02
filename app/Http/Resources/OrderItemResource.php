@@ -19,6 +19,7 @@ class OrderItemResource extends JsonResource
             'quantity' => $this->quantity,
             'price' => $this->price,
             'color' => $this->color,
+            'size' => $this->size,
             'store_name' => $this->product->seller->store_name,
         ];
     }
