@@ -71,6 +71,11 @@ class Seller extends Authenticatable
         return'slug';
     }
 
+    public function order_items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
 
     public function products()
     {
