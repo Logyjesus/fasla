@@ -11,10 +11,7 @@ class Category extends Model
 {
     use HasSlug,HasFactory;
 
-    protected $fillable = [
-        'name',
-        'slug',
-    ];
+    protected $guarded = [];
 
     public function getSlugOptions(): SlugOptions
     {

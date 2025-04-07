@@ -31,6 +31,13 @@ class CategoryController extends Controller
         $category = Category::create([
             'name' => $data['name'],
         ]);
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move('images', $filename);
+            $category->image = $filename;
+            $category->save();
+        }
         return response()->json(new CategoryResource($category), 201);
     }
 
@@ -60,6 +67,13 @@ class CategoryController extends Controller
         $category->update([
             'name' => $data['name'],
         ]);
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move('images', $filename);
+            $category->image = $filename;
+            $category->save();
+        }
 
         return response()->json(new CategoryResource($category), 200);
     }

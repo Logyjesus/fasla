@@ -24,6 +24,7 @@ class SubCategoryRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'category_id' => 'required|exists:categories,id',
+            'image' => 'required|image|mimes:jpeg,png,jpg,svg|max:2048',
         ];
     }
 }

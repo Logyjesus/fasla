@@ -44,6 +44,13 @@ class SubCategoryController extends Controller
             'name' => $data['name'],
             'category_id' => $data['category_id'],
         ]);
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move('images', $filename);
+            $subcategory->image = $filename;
+            $subcategory->save();
+        }
         return response()->json(new SubCategoryResource($subcategory), 201);
     }
 
@@ -65,6 +72,13 @@ class SubCategoryController extends Controller
         if($subcategory)
         {
             $subcategory->update($data);
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $filename = time() .'.' . $image->getClientOriginalExtension();
+                $image->move('images', $filename);
+                $subcategory->image = $filename;
+                $subcategory->save();
+            }
             return response()->json(new SubCategoryResource($subcategory), 200);
         }
         return response()->json(['message' => 'Subcategory not found'], 404);

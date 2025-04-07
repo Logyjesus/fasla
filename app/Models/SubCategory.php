@@ -10,11 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class SubCategory extends Model
 {
     use HasFactory,HasSlug;
-    protected $fillable = [
-        'name',
-        'slug',
-        'category_id',
-    ];
+    protected $guarded = [];
 
     public function getSlugOptions(): SlugOptions
     {
