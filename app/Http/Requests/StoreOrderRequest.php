@@ -32,6 +32,7 @@ class StoreOrderRequest extends FormRequest
             'order_items.*.quantity' => 'required|integer|min:1',
             'order_items.*.price' => 'required|numeric|min:0',
             'order_items.*.color' => 'nullable|string',
+            'order_items.*.size' => 'nullable|string',
         ];
     }
 
