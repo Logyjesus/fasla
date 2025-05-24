@@ -42,6 +42,8 @@ Route::middleware('auth:seller')->prefix('dashboard')->group( function () {
         Route::apiResource('admins',AdminController::class);
         Route::delete('/orders/{slug}', [OrderController::class, 'destroy']);
         Route::get('/orders/{slug}', [OrderController::class, 'show']);
+        Route::get('/categories',[CategoryController::class,'index']);
+        Route::get('/sub-categories/{slug}',[SubCategoryController::class,'getSubCategoriesByCategory']);
     });
 });
 Route::post('/register',[AuthController::class,'register']);
