@@ -33,10 +33,12 @@ Route::middleware('auth:seller')->prefix('dashboard')->group( function () {
     Route::post('/logout',[AuthController::class,'DashboardLogout']);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('orders', OrderController::class)->only(['index','update']);
+    Route::get('/orders/{slug}', [OrderController::class, 'show']);
+    Route::get('categories',[CategoryController::class,'index']);
+    Route::get('sub-categories/{slug}', [SubCategoryController::class, 'getSubCategoriesByCategory']);
     Route::middleware('role:admin')->group(function () {
-        Route::apiResource('categories', CategoryController::class);
-        Route::apiResource('sub-categories', SubCategoryController::class);
-        Route::get('/sub-categories/{slug}',[SubCategoryController::class,'getSubCategoriesByCategory']);
+        Route::apiResource('categories', CategoryController::class)->except(['index']);
+        Route::apiResource('sub-categories', SubCategoryController::class)->except(['index']);
         Route::apiResource('users', UserController::class);
         Route::apiResource('sellers',sellerController::class);
         Route::apiResource('admins',AdminController::class);
