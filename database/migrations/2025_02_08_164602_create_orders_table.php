@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users','id')->cascadeOnDelete();
             $table->decimal('total_price', 10, 2);
             $table->string('status')->default(OrderStatusEnum::PENDING->value);
             $table->text('shipping_address');

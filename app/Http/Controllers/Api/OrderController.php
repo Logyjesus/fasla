@@ -24,7 +24,11 @@ class OrderController extends Controller
         } else {
             $orders = Order::whereHas('orderItems', function ($query) use ($user) {
                 $query->where('seller_id', $user->id);
-            })->paginate(10);
+            })
+            ->with(['orderItems' => function ($query) use ($user) {
+                $query->where('seller_id', $user->id);
+            }])
+            ->paginate(10);
         }
         if(!$orders->isEmpty())
         {
