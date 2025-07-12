@@ -13,12 +13,14 @@ class SubCategoryResource extends JsonResource
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
-    {
-        return [
-            'name' => $this->name,
-            'slug' => $this->slug,
-            'image' => asset('images/' . $this->image),
-            'category' => new CategoryResource($this->category),
-        ];
-    }
+{
+    return [
+        'id' => $this->id, // ✅ أضف هذا السطر
+        'name' => $this->name,
+        'slug' => $this->slug,
+        'image' => asset('images/' . $this->image),
+        'category' => new CategoryResource($this->category),
+    ];
+}
+
 }
